@@ -21,37 +21,18 @@
 	function handleLetGo() {
 		if (canInteract) {
 			isDragging = false;
-			switch(position) {
-				case 'right':
-					if (movementThrow > 8) {
-						close();
-						return;
-					} else if (movementThrow < -8) {
-						open();
-						return;
-					}
-					if (translateX < windowWidth - (maxWidth / 2)){
-						open();
-					} else {
-						close();
-					}
-					break;
-				case 'left':
-				default:
-					if (movementThrow > 8) {
-						open();
-						return;
-					} else if (movementThrow < -8) {
-						close();
-						return;
-					}
+			if ((position === 'left' && movementThrow > 8) || (position === 'right' && movementThrow < -8)) {
+				open();
+				return;
+			} else if ((position === 'left' && movementThrow < -8) || (position === 'right' && movementThrow > 8)) {
+				close();
+				return;
+			}
 
-					if (translateX > (maxWidth / 2)){
-						open();
-					} else {
-						close();
-					}
-					break;
+			if ((position === 'left' && translateX > (maxWidth / 2)) || (position === 'right' && translateX < windowWidth - (maxWidth / 2))){
+				open();
+			} else {
+				close();
 			}
 		}
 	}
