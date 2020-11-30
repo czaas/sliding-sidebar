@@ -1,6 +1,9 @@
 {
-  "name": "svelte-app",
+  "name": "sliding-sidebar",
   "version": "1.0.0",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "svelte": "src/index.js",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",

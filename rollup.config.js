@@ -30,12 +30,19 @@ function serve() {
 
 export default {
 	input: 'src/main.js',
-	output: {
-		sourcemap: true,
-		format: 'iife',
-		name: 'app',
-		file: 'public/build/bundle.js'
-	},
+	output: [
+		{
+			sourcemap: true,
+			format: 'es',
+			name: 'app',
+			file: 'public/build/sliding-sidebar.es.js'
+		},{
+			sourcemap: true,
+			format: 'iife',
+			name: 'app',
+			file: 'public/build/sliding-sidebar.iife.js'
+		}
+	],
 	plugins: [
 		svelte({
 			compilerOptions: {
