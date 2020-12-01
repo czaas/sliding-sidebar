@@ -1,4 +1,6 @@
 <script>
+	import {onMount, onDestroy} from 'svelte';
+
 	export let maxWidth = 300;
 	export let position = "left";
 	export let baseZIndex = 99;
@@ -6,6 +8,9 @@
 	export let disableDrag = false;
 	export let veilStyles = `background: rgba(0,0,0,.5); {transition: opacity .2s ease;}`;
 	
+	let id = generateId();
+	let sidebar = null;
+	let handle = null;
 	let isOpen = false;
 	let isDragging = false;
 	let translateX = position === 'left' ? 0 : window.innerWidth;
@@ -97,6 +102,27 @@
 		veilOpacity = 0;
 		isOpen = false;
 	}
+	function generateId() {
+		// Math.random should be unique because of its seeding algorithm.
+		// Convert it to base 36 (numbers + letters), and grab the first 9 characters
+		// after the decimal.
+		return '_' + Math.random().toString(36).substr(2, 9);
+	}
+	onMount(() => {
+		sidebar = document.querySelector(`#sidebar-${id}`);
+		handle =  document.querySelector(`#handle-${id}`);
+		
+		// mobile handlers
+		handle.addEventListener('touchstart', handleInteract);
+		document.addEventListener('touchmove', handleMobileMove);
+		document.addEventListener('touchend', handleLetGo);
+	});
+	onDestroy(() => {
+		// mobile handlers
+		handle.removeEventListener('touchstart', handleInteract);
+		document.removeEventListener('touchmove', handleMobileMove);
+		document.removeEventListener('touchend', handleLetGo);
+	});
 	
 	$: sidebarTranslateX = position === 'left' ? translateX - maxWidth : translateX;
 </script>
@@ -104,22 +130,21 @@
 	on:resize={handleResize}
 	on:mouseup={handleLetGo}
 	on:mousemove={handleDesktopMove}
-	on:touchmove={handleMobileMove}
-	on:touchend={handleLetGo}
 />
 <div 
 	class="sidebar shared" 
 	class:sidebarRight={position === "right"}
 	style="z-index: {baseZIndex + 1}; max-width: {maxWidth}px; transform: translate3d({sidebarTranslateX}px, 0, 0);{isDragging ? "transition: none" : ""}"
+	id="sidebar-{id}"
 >
 	<slot></slot>
 </div>
 <div 
 	on:mousedown={handleInteract}
-	on:touchdown={handleInteract}
 	class="sidebarHandle shared" 
 	class:sidebarRight={position === "right"}
 	style="z-index: {baseZIndex + 2}; transform: translate3d({translateX}px, 0, 0);{isDragging ? "transition: none" : ""}"
+	id="handle-{id}"
 >
 	<slot name="handle"></slot>
 </div>
@@ -159,7 +184,7 @@
 		cursor: grab;
 	}
 	.sidebarHandle.sidebarRight {
-		left: -48px;
+		left: -32px;
 	}
 	.hideVeil {
 		opacity: 0;

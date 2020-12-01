@@ -2,7 +2,8 @@
 	import Sidebar from './Sidebar.svelte';
 </script>
 <style>
-	.customHandle {
+	.customHandle,
+	.secondCustomHandle {
 		position: relative;
 		width: 16px;
 		height: 100%;
@@ -11,9 +12,12 @@
 		align-items: center;
 		pointer-events: none;
 	}
+	.secondCustomHandle {
+		left: 26%;
+	}
 </style>
 <div>
-	<Sidebar position="left" veilStyles="background: rgba(0,255,0,.7); transition: .2s ease-out;">
+	<Sidebar position="left">
 		<div slot="handle" class="customHandle">
 			<span aria-label="drawer handle">||</span>
 		</div>
@@ -99,8 +103,8 @@
 			<li>Donec quis dui at dolor tempor interdum.</li>
 		</ul>
 	</Sidebar>
-	<Sidebar position="right">
-		<div slot="handle" class="customHandle">
+	<Sidebar position="right" veilStyles="background: rgba(0,255,0,.7); transition: .2s ease-out;">
+		<div slot="handle" class="secondCustomHandle">
 			<span aria-label="drawer handle">||</span>
 		</div>
 		<h2>Testing</h2>
